@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import TodoDetail from "./todoDetail";
 import Todo from "./todos";
-// import { myTodoProps } from "../utils/types";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTodo } from "../redux/features/todoSlice";
 import type { RootState, AppDispatch } from "../redux/store";
@@ -27,13 +26,6 @@ export default function Main() {
     const {loading, error, data} = todo;
     const myTodos = data;
     console.log(myTodos)
-
-    // const myTodosi: myTodoProps[] = [
-    //     {title: 'my document', description: 'All of my document goes in here', status: 'not started', priority: 'high', image: '/assets/images/come.jpg', timeStamp: '2 mins ago', id: 1},
-    //     {title: 'my document', description: 'All of my document goes in here', status: 'in progress', priority: 'low', image: '/assets/images/come.jpg', timeStamp: '2 mins ago', id: 2},
-    //     {title: 'my document', description: 'All of my document goes in here', status: 'completed', priority: 'moderate', image: '/assets/images/come.jpg', timeStamp: '2 mins ago', id: 3},
-    // ];
-
 
     return(
         <section

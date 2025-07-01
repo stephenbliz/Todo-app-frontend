@@ -10,9 +10,7 @@ import { DateFormat } from "./dateFormat";
 
 export default function TodoDetail ({myTodos, id}: TodoDetailProps) {
 
-    const todo = myTodos.find((mytodo) => {
-            return  mytodo._id === id;
-        })
+    const todo = myTodos.find(mytodo =>  mytodo._id === id)
 
     const status = todo?.status;
     const priority = todo?.priority;
