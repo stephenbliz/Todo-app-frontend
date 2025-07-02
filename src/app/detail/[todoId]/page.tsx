@@ -18,10 +18,25 @@ export default function Detail({params}: {params:Promise<{todoId: string}>}){
         <div
             className=" mt-[7rem] p-4"
         >
-            <TodoDetail 
+            {loading && 
+                <div
+                    className="text-sm font-semibold "
+                >
+                    Loading...
+                </div>
+            }
+            {myTodos && <TodoDetail 
                 myTodos={myTodos}
                 id={id}
             />
+            }
+            {error && 
+                <div
+                    className="text-sm font-semibold "
+                >
+                    {error}
+                </div>
+            }
         </div>
     )
 }
