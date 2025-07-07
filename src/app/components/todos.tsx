@@ -12,9 +12,9 @@ export default function Todo ({myTodos, setId, hasMounted}: TodoProps) {
     return(
         <>
         {
-            myTodos.map((mytodo)=>{
-                const priority = mytodo.priority;
-                const status = mytodo.status;
+            myTodos?.map((mytodo)=>{
+                const priority = mytodo.priority!;
+                const status = mytodo.status!;
                 const priorityColor = handlePriorityColor(priority);
                 const statusColor = handleStatusColor(status);
 

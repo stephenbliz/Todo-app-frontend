@@ -1,6 +1,9 @@
 'use client';
 import Image from "next/image"
 import { handlePriorityColor, handleStatusColor } from "../utils/functions";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../redux/store";
+import { deleteTodo } from "../redux/features/todoSlice";
 import Link from "next/link";
 import { MdDelete } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
@@ -16,6 +19,8 @@ export default function TodoDetail ({myTodos, id}: TodoDetailProps) {
     const priority = todo?.priority;
     const statusColor = handleStatusColor(status!);
     const priorityColor = handlePriorityColor(priority!);
+    
+    const dispatch = useDispatch<AppDispatch>()
 
     return (
         <>
@@ -81,6 +86,7 @@ export default function TodoDetail ({myTodos, id}: TodoDetailProps) {
             >
                 <div
                     className="w-fit bg-red-400 p-1 border border-red-400 cursor-pointer rounded-lg text-gray-200"
+                    onClick={()=> dispatch(deleteTodo(id))}
                 >
                     <MdDelete />
                 </div>

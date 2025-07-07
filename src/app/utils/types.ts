@@ -5,7 +5,7 @@ export interface myTodoProps{
     description: string
     status: string
     priority: string
-    image: string
+    image: File | null
     createdAt: string
     _id: string
 }

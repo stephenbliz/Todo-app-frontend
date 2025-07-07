@@ -1,11 +1,12 @@
-// 'use client';
 import { configureStore } from "@reduxjs/toolkit";
-import todoReducer from '../redux/features/todoSlice'
+import todoReducer from '../redux/features/todoSlice';
+import cakeReducer from '../redux/features/cakeSlice';
 
 
 const store = configureStore({
     reducer : {
-        todo: todoReducer
+        todo: todoReducer,
+        cake: cakeReducer
     }
 })
 

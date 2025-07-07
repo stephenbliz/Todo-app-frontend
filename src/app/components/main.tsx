@@ -21,9 +21,7 @@ export default function Main() {
         dispatch(fetchTodo());
     }, [])
 
-    const todo = useSelector((state: RootState)=>{
-        return state.todo;
-    })
+    const todo = useSelector((state: RootState)=> state.todo)
 
     const {loading, error, data} = todo;
     const myTodos = data;
@@ -63,12 +61,11 @@ export default function Main() {
                         Loading...
                     </div>
                     }
-                    {myTodos && <Todo
+                    <Todo
                         myTodos ={myTodos}
                         setId = {setId}
                         hasMounted = {hasMounted}
                     /> 
-                    }
                     {error && <div
                         className="text-sm font-semibold "
                     >

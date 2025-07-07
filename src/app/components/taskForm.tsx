@@ -1,16 +1,47 @@
 'use client';
-import { useState } from "react";
+import { FormEvent, useState } from "react";
+import { useDispatch } from "react-redux";
+import {postTodo} from '../redux/features/todoSlice'
+import { AppDispatch} from "../redux/store";
+import { useRouter } from "next/navigation";
 
 export default function TaskForm(){
 
     const [title, setTitle] = useState('');
     const [priority, setPriority] = useState('');
     const [status, setStatus] = useState('');
-    const [description, setDescription] = useState('')
+    const [description, setDescription] = useState('');
+    const [imageFile, setImageFile] = useState<File | null>(null);
+    
+    const router = useRouter();
+
+    const dispatch = useDispatch<AppDispatch>();
+
+    const handleSubmit = (e:FormEvent<HTMLFormElement>)=>{
+        e.preventDefault();
+        const todoObject = {
+            title,
+            priority,
+            status,
+            description,
+            image: imageFile
+        };
+        dispatch(postTodo(todoObject)).then(()=>{
+            setTitle('');
+            setPriority('');
+            setStatus('');
+            setDescription('');
+            setImageFile(null);
+            console.log('Post successfully');
+            router.push('/');
+        });
+        console.log(todoObject);
+    }
 
     return(
         <form
             className="border-2 border-gray-300 md:w-[80%] mx-auto p-4 md:p-[5%] mb-[6rem] relative"
+            onSubmit={(e)=>handleSubmit(e)}
         >
             <div
                 className="w-full lg:w-[60%] mb-4"
@@ -27,7 +58,7 @@ export default function TaskForm(){
                     onChange={(e)=> setTitle(e.target.value)}
                     value={title}
                     id="title"
-                    className="border border-gray-400 w-full text-gray-500 text-sm block outline-none focus:border-blue-400 rounded-lg py-1 px-4"
+                    className="border cursor-pointer border-gray-400 w-full text-gray-500 text-sm block outline-none focus:border-blue-400 rounded-lg py-1 px-4"
                 />
             </div>
             <div
@@ -72,7 +103,7 @@ export default function TaskForm(){
                                         value={prior}
                                         checked={priority===prior}
                                         id={prior}
-                                        className=""
+                                        className="cursor-pointer"
                                     />
                             
                                 </label>
@@ -123,7 +154,7 @@ export default function TaskForm(){
                                         value={stat}
                                         checked={status===stat}
                                         id={stat}
-                                        className=""
+                                        className="cursor-pointer"
                                     />
                             
                                 </label>
@@ -150,26 +181,25 @@ export default function TaskForm(){
                         value={description}
                         id="title"
                         placeholder="Start writing here..."
-                        className="border border-gray-400 w-full h-[10rem] text-gray-500 text-sm block outline-none focus:border-blue-400 rounded-lg py-1 px-4"
+                        className="border border-gray-400 cursor-pointer w-full h-[10rem] text-gray-500 text-sm block outline-none focus:border-blue-400 rounded-lg py-1 px-4"
                     />
                 </div>
                 <div
                     className="w-[60%] lg:w-[30%]"
                 >
                     <label 
-                        htmlFor="description"
+                        htmlFor="image"
                         className="font-semibold capitalize block mb-2 text-sm"
                     >
                         upload image
                     </label>
                     <input
                         type="file" 
-                        name="description" 
-                        onChange={(e)=> setDescription(e.target.value)}
-                        value={description}
-                        id="title"
-                        placeholder="Start writing here..."
-                        className="border border-gray-400 w-full h-[5rem] lg:h-[10rem] text-gray-500 text-sm block outline-none focus:border-blue-400 rounded-lg py-1 px-4"
+                        name="image" 
+                        accept="image/*"
+                        onChange={(e)=> setImageFile(e.target.files![0])}
+                        id="image"
+                        className="border cursor-pointer border-gray-400 w-full h-[5rem] lg:h-[10rem] text-gray-500 text-sm block outline-none focus:border-blue-400 rounded-lg py-1 px-4"
                     />
                 </div>
             </div>
