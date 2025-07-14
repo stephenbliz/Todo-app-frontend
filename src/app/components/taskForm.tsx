@@ -1,41 +1,56 @@
 'use client';
-import { FormEvent, useState } from "react";
-import { useDispatch } from "react-redux";
-import {postTodo} from '../redux/features/todoSlice'
-import { AppDispatch} from "../redux/store";
+import { FormEvent} from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {postTodo, updateTodo} from '../redux/features/todoSlice'
+import { setTitle, setDescription, setImageFile, setPriority, setStatus, setEditingId } from "../redux/features/todoFieldsSlice";
+import { AppDispatch, RootState} from "../redux/store";
 import { useRouter } from "next/navigation";
 
 export default function TaskForm(){
-
-    const [title, setTitle] = useState('');
-    const [priority, setPriority] = useState('');
-    const [status, setStatus] = useState('');
-    const [description, setDescription] = useState('');
-    const [imageFile, setImageFile] = useState<File | null>(null);
     
     const router = useRouter();
 
     const dispatch = useDispatch<AppDispatch>();
 
+    const todoFields = useSelector((state: RootState) => {
+        return state.todoFields;
+    });
+
     const handleSubmit = (e:FormEvent<HTMLFormElement>)=>{
         e.preventDefault();
-        const todoObject = {
-            title,
-            priority,
-            status,
-            description,
-            image: imageFile
-        };
-        dispatch(postTodo(todoObject)).then(()=>{
-            setTitle('');
-            setPriority('');
-            setStatus('');
-            setDescription('');
-            setImageFile(null);
-            console.log('Post successfully');
+        const todoObject = new FormData();
+        todoObject.append('title', todoFields.title)
+        todoObject.append('priority', todoFields.priority)
+        todoObject.append('status', todoFields.status)
+        todoObject.append('description', todoFields.description)
+        if(todoFields.imageFile){
+            todoObject.append('image', todoFields.imageFile)
+        }
+
+        if (todoFields.editingId !== null){
+            todoObject.forEach((value, key) =>{
+                console.log(key, ':', value);
+            })
+            dispatch(updateTodo({id:todoFields.editingId, update:todoObject})).then(()=>{
+                dispatch(setTitle(''));
+                dispatch(setEditingId(null));
+            dispatch(setPriority(''));
+            dispatch(setStatus(''));
+            dispatch(setDescription(''));
+            dispatch(setImageFile(null));
+            router.push('/');
+            })
+        }else{
+            dispatch(postTodo(todoObject)).then(()=>{
+            dispatch(setTitle(''));
+            dispatch(setPriority(''));
+            dispatch(setStatus(''));
+            dispatch(setDescription(''));
+            dispatch(setImageFile(null));
             router.push('/');
         });
-        console.log(todoObject);
+        }
+        
     }
 
     return(
@@ -55,8 +70,8 @@ export default function TaskForm(){
                 <input 
                     type="text"
                     name="title" 
-                    onChange={(e)=> setTitle(e.target.value)}
-                    value={title}
+                    onChange={(e)=> dispatch(setTitle(e.target.value))}
+                    value={todoFields.title}
                     id="title"
                     className="border cursor-pointer border-gray-400 w-full text-gray-500 text-sm block outline-none focus:border-blue-400 rounded-lg py-1 px-4"
                 />
@@ -99,9 +114,9 @@ export default function TaskForm(){
                                     <input 
                                         type="radio"
                                         name={prior} 
-                                        onChange={(e)=> setPriority(e.target.value)}
+                                        onChange={(e)=> dispatch(setPriority(e.target.value))}
                                         value={prior}
-                                        checked={priority===prior}
+                                        checked={todoFields.priority===prior}
                                         id={prior}
                                         className="cursor-pointer"
                                     />
@@ -150,9 +165,9 @@ export default function TaskForm(){
                                     <input 
                                         type="radio"
                                         name={stat} 
-                                        onChange={(e)=> setStatus(e.target.value)}
+                                        onChange={(e)=> dispatch(setStatus(e.target.value))}
                                         value={stat}
-                                        checked={status===stat}
+                                        checked={todoFields.status===stat}
                                         id={stat}
                                         className="cursor-pointer"
                                     />
@@ -177,8 +192,8 @@ export default function TaskForm(){
                     </label>
                     <textarea 
                         name="description" 
-                        onChange={(e)=> setDescription(e.target.value)}
-                        value={description}
+                        onChange={(e)=> dispatch(setDescription(e.target.value))}
+                        value={todoFields.description}
                         id="title"
                         placeholder="Start writing here..."
                         className="border border-gray-400 cursor-pointer w-full h-[10rem] text-gray-500 text-sm block outline-none focus:border-blue-400 rounded-lg py-1 px-4"
@@ -197,7 +212,12 @@ export default function TaskForm(){
                         type="file" 
                         name="image" 
                         accept="image/*"
-                        onChange={(e)=> setImageFile(e.target.files![0])}
+                        onChange={(e)=> {
+                            const file = e.target.files?.[0];
+                            if(file){
+                                dispatch(setImageFile(file));
+                            }
+                        }}
                         id="image"
                         className="border cursor-pointer border-gray-400 w-full h-[5rem] lg:h-[10rem] text-gray-500 text-sm block outline-none focus:border-blue-400 rounded-lg py-1 px-4"
                     />
@@ -207,7 +227,7 @@ export default function TaskForm(){
                 type="submit"
                 className="absolute -bottom-[4rem] left-[5%] w-fit bg-red-400 text-gray-300 rounded-lg px-4 py-1 capitalize cursor-pointer text-sm"
             >
-                done
+                {todoFields.editingId ? 'update' : 'post'}
             </button>
         </form>
     )

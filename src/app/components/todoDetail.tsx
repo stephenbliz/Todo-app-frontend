@@ -1,14 +1,16 @@
 'use client';
 import Image from "next/image"
 import { handlePriorityColor, handleStatusColor } from "../utils/functions";
-import { useDispatch } from "react-redux";
 import { AppDispatch } from "../redux/store";
 import { deleteTodo } from "../redux/features/todoSlice";
 import Link from "next/link";
 import { MdDelete } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
-import { TodoDetailProps } from "../utils/types";
+import { myTodoProps, TodoDetailProps } from "../utils/types";
 import { DateFormat } from "./dateFormat";
+import { useRouter } from "next/navigation";
+import { setStatus, setDescription, setPriority, setTitle, setEditingId, setImageFile } from "../redux/features/todoFieldsSlice";
+import { useDispatch } from "react-redux";
 
 
 export default function TodoDetail ({myTodos, id}: TodoDetailProps) {
@@ -19,8 +21,20 @@ export default function TodoDetail ({myTodos, id}: TodoDetailProps) {
     const priority = todo?.priority;
     const statusColor = handleStatusColor(status!);
     const priorityColor = handlePriorityColor(priority!);
-    
-    const dispatch = useDispatch<AppDispatch>()
+    const dispatch = useDispatch<AppDispatch>();
+    const router = useRouter();
+
+    const handleEdit = (todo: myTodoProps) => {
+        router.push('/add-task');
+        dispatch(setTitle(todo.title));
+        dispatch(setStatus(todo.status));
+        dispatch(setPriority(todo.priority));
+        dispatch(setDescription(todo.description));
+        dispatch(setImageFile(todo.image));
+        dispatch(setEditingId(todo._id));
+        
+    }
+
 
     return (
         <>
@@ -28,13 +42,13 @@ export default function TodoDetail ({myTodos, id}: TodoDetailProps) {
             className="relative"
         >
             <div
-                className="flex mb-8 items-start lg:items-end justify-start gap-4"
+                className="flex mb-8 mt-[2rem] lg:mt-0 items-start lg:items-end justify-start gap-4"
             >
                 <div
                     className="w-[30%]"
                 >
                     <Image 
-                        src='/assets/myPhoto.jpg'
+                        src={todo.image? `http://localhost:4000/uploads/${todo.image}` : '/assets/myPhoto.jpg'}
                         alt="Todo image"
                         width={50}
                         height={50}
@@ -92,11 +106,23 @@ export default function TodoDetail ({myTodos, id}: TodoDetailProps) {
                 </div>
                 <div
                     className="w-fit bg-red-400 p-1 border border-red-400 cursor-pointer rounded-lg text-gray-200"
+                    onClick={()=>handleEdit(todo)}
                 >
                     <MdEdit />
                 </div>
             </div>
-        </div> : <div>Click on a todo to display details</div>} 
+        </div> : 
+        <div
+            className="mt-[2rem] lg:mt-0"
+        >
+            <Link
+                href='/'
+                className="capitalize underline font-semibold text-sm lg:hidden "
+            >
+                go back
+            </Link>
+            <div className="mt-[1rem] lg:mt-0">Click on a todo to display details</div>
+        </div>} 
         </>
         
     )

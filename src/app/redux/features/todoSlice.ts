@@ -1,6 +1,12 @@
 import { createSlice, createAsyncThunk, PayloadAction} from "@reduxjs/toolkit";
 import { todoInitialProp, myTodoProps } from "@/app/utils/types";
 
+const baseURL = process.env.NEXT_PUBLIC_API_URL;
+
+if (!baseURL) {
+  throw new Error("Missing NEXT_PUBLIC_API_URL environment variable");
+}
+
 const initialState: todoInitialProp = {
     loading: false,
     data: [],
@@ -8,36 +14,32 @@ const initialState: todoInitialProp = {
 }
 
 export const fetchTodo = createAsyncThunk('todo/fetchTodo', async ()=>{
-    const res = await fetch('http://localhost:4000/api/todo');
+    const res = await fetch(baseURL);
     const data = await res.json();
     return data as myTodoProps[];
 })
 
-export const postTodo = createAsyncThunk('todo/postTodo', async (todoObject: Partial<myTodoProps>)=>{
-    const res = await fetch('http://localhost:4000/api/todo', {
+export const postTodo = createAsyncThunk('todo/postTodo', async (todoObject: FormData)=>{
+    const res = await fetch(baseURL, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(todoObject)
+        body: todoObject
     });
     const data = await res.json();
     return data;
 
 })
 
-export const updateTodo = createAsyncThunk('todo/updateTodo', async ({id, update}:{id: string, update: Partial<myTodoProps>}) => {
-    const res = await fetch(`http://localhost:4000/api/todo/${id}`, {
+export const updateTodo = createAsyncThunk('todo/updateTodo', async ({id, update}:{id: string; update: FormData}) => {
+    const res = await fetch(`${baseURL}${id}`, {
         method: 'PUT',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(update)
+        body: update
     });
     const data = await res.json();
     return data;
 })
 
 export const deleteTodo = createAsyncThunk('todo/deleteTodo', async (id: string) => {
-    const res = await fetch(`http://localhost:4000/api/todo/${id}`,{
+    const res = await fetch(`${baseURL}${id}`,{
         method: 'DELETE'
     });
     const data = await res.json();
@@ -59,7 +61,6 @@ const todoSlice = createSlice({
         })
         builder.addCase(fetchTodo.rejected, (state, action) => {
             state.loading = false;
-            // state.data = [];
             state.error = action.error.message || 'Something went wrong';
         });
         builder.addCase(postTodo.pending, (state)=>{

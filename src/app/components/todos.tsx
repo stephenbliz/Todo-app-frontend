@@ -1,6 +1,5 @@
 'use client';
 import Image from "next/image";
-import { BsThreeDots } from "react-icons/bs";
 import { handlePriorityColor, handleStatusColor } from "../utils/functions";
 import { TodoProps } from "../utils/types";
 import { useRouter } from "next/navigation";
@@ -13,6 +12,7 @@ export default function Todo ({myTodos, setId, hasMounted}: TodoProps) {
         <>
         {
             myTodos?.map((mytodo)=>{
+                console.log(mytodo);
                 const priority = mytodo.priority!;
                 const status = mytodo.status!;
                 const priorityColor = handlePriorityColor(priority);
@@ -22,11 +22,9 @@ export default function Todo ({myTodos, setId, hasMounted}: TodoProps) {
                     if(!hasMounted) return;
 
                     if(window.innerWidth<768){
-                        console.log('This is mobile phase');
-                        router.push(`/detail/${mytodo._id}`)
+                        router.push(`/detail/${mytodo._id}`);
                     }else{
-                        setId(mytodo._id)
-                        console.log('This is desktop phase', mytodo._id);
+                        setId(mytodo._id);
                     }
                 }
                 
@@ -50,8 +48,9 @@ export default function Todo ({myTodos, setId, hasMounted}: TodoProps) {
 
                 return(
                     <div
-                        className="border border-gray-400 rounded-xl p-2 mb-2"
+                        className="border border-gray-400 rounded-xl cursor-pointer p-2 mb-2"
                         key={mytodo._id}
+                        onClick={handleClick}
                     >
                         <div
                             className="flex relative justify-between items-start"
@@ -67,8 +66,7 @@ export default function Todo ({myTodos, setId, hasMounted}: TodoProps) {
                                 className="w-[60%]"
                             >
                                 <h3
-                                    className="text-[1rem] cursor-pointer font-semibold capitalize mb-2"
-                                    onClick={handleClick}
+                                    className="text-[1rem] font-semibold capitalize mb-2"    
                                 >
                                     {mytodo.title}
                                 </h3>
@@ -97,13 +95,8 @@ export default function Todo ({myTodos, setId, hasMounted}: TodoProps) {
                             <div
                                 className="w-[30%] relative"
                             >
-                                <div
-                                    className="mb-4 w-fit absolute right-0 top-0 text-gray-300 text-xl cursor-pointer"
-                                >
-                                    <BsThreeDots />
-                                </div>
                                 <Image 
-                                    src='/assets/myPhoto.jpg'
+                                    src={mytodo.image? `http://localhost:4000/uploads/${mytodo.image}` : '/assets/myPhoto.jpg'}
                                     alt="Todo image"
                                     width={50}
                                     height={50}
