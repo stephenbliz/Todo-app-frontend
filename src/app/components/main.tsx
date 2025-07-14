@@ -17,9 +17,10 @@ export default function Main() {
     useEffect(()=>{
         setHasMounted(true);
     },[])
+    
     useEffect(()=>{
         dispatch(fetchTodo());
-    }, [])
+    }, [dispatch])
 
     const todo = useSelector((state: RootState)=> state.todo)
 

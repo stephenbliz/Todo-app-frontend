@@ -8,7 +8,7 @@ export default function Nav() {
     const [searchTask, setSearchTask] = useState('');
     const [day, setDay] = useState('');
     const [date, setDate] = useState('');
-    const [year, setYear] = useState<Number | null>(null);
+    const [year, setYear] = useState<number | null>(null);
     const [month, setMonth] = useState('');
 
     const handleSubmit = (e:React.FormEvent<HTMLFormElement>)=>{
