@@ -48,7 +48,7 @@ export default function TodoDetail ({myTodos, id}: TodoDetailProps) {
                     className="w-[30%]"
                 >
                     <Image 
-                        src={todo.image? `http://localhost:4000/uploads/${todo.image}` : '/assets/myPhoto.jpg'}
+                        src={todo.image? todo.image : '/assets/myPhoto.jpg'}
                         alt="Todo image"
                         width={50}
                         height={50}

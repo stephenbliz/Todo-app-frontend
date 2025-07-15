@@ -96,7 +96,7 @@ export default function Todo ({myTodos, setId, hasMounted}: TodoProps) {
                                 className="w-[30%] relative"
                             >
                                 <Image 
-                                    src={mytodo.image? `http://localhost:4000/uploads/${mytodo.image}` : '/assets/myPhoto.jpg'}
+                                    src={mytodo.image? mytodo.image : '/assets/myPhoto.jpg'}
                                     alt="Todo image"
                                     width={50}
                                     height={50}
