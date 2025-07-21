@@ -31,3 +31,11 @@ export interface todoFieldsInitialProp{
     editingId: string | null
     imageFile: File | null
 }
+export interface userInitialProps{
+    user: any
+    loading: boolean
+    isAuthenticated: boolean
+    token: string | null
+    message: string | null
+    error: string | null
+}

@@ -1,12 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import todoReducer from '../redux/features/todoSlice';
 import todoFieldReducer from '../redux/features/todoFieldsSlice';
+import userReducer from '../redux/features/userSlice';
 
 
 const store = configureStore({
     reducer : {
         todo: todoReducer,
-        todoFields: todoFieldReducer
+        todoFields: todoFieldReducer,
+        user: userReducer
     },
     middleware: (getDefaultMiddleware) =>{
        return getDefaultMiddleware({
