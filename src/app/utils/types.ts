@@ -39,3 +39,7 @@ export interface userInitialProps{
     message: string | null
     error: string | null
 }
+export interface credentialsProps{
+    email: string
+    password: string
+}

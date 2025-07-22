@@ -22,11 +22,7 @@ export default function Main() {
         dispatch(fetchTodo());
     }, [dispatch])
 
-    const todo = useSelector((state: RootState)=> state.todo)
-
-    const {loading, error, data} = todo;
-    const myTodos = data;
-    console.log(myTodos)
+    const {loading, error, data} = useSelector((state: RootState)=> state.todo);
 
     return(
         <section
@@ -56,22 +52,26 @@ export default function Main() {
                 </div>
 
                 <div>
-                    {loading && <div
-                        className="text-sm font-semibold "
-                    >
-                        Loading...
-                    </div>
+                    {loading && 
+                        <div
+                            className="text-sm font-semibold "
+                        >
+                            Loading...
+                        </div>
                     }
-                    <Todo
-                        myTodos ={myTodos}
-                        setId = {setId}
-                        hasMounted = {hasMounted}
-                    /> 
-                    {error && <div
-                        className="text-sm font-semibold "
-                    >
-                        {error}
-                    </div>
+                    {data && 
+                        <Todo
+                            myTodos ={data}
+                            setId = {setId}
+                            hasMounted = {hasMounted}
+                        />
+                    } 
+                    {error && 
+                        <div
+                            className="text-sm font-semibold "
+                        >
+                            {error}
+                        </div>
                     }
                 </div>
                 
@@ -80,10 +80,12 @@ export default function Main() {
             <section
                 className="lg:col-span-6 border hidden lg:block border-gray-300 rounded p-4 shadow-gray-300 shadow-sm overflow-y-scroll max-h-[80vh]"
             >
-                <TodoDetail 
-                    myTodos ={myTodos}
-                    id = {id}
-                />
+                {data &&
+                    <TodoDetail 
+                        myTodos ={data}
+                        id = {id}
+                    />
+                }
             </section>
         </section>
     )

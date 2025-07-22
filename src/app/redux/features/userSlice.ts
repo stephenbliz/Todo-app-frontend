@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { userInitialProps } from "@/app/utils/types";
+import { credentialsProps, userInitialProps } from "@/app/utils/types";
 
 const initialState: userInitialProps = {
     user: null,
@@ -10,17 +10,16 @@ const initialState: userInitialProps = {
     message: null
 }
 
-export const register = createAsyncThunk('user/register', async (credentials)=>{
+export const register = createAsyncThunk('user/register', async (credentials: any)=>{
     const res = await fetch('http://localhost:4000/api/register',{
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(credentials)
+        body: credentials
     })
     const data = await res.json();
     return data;
 })
 
-export const logIn = createAsyncThunk('user/logIn', async (credentials)=>{
+export const logIn = createAsyncThunk('user/logIn', async (credentials: credentialsProps)=>{
     const res = await fetch('http://localhost:4000/api/login', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -55,10 +54,12 @@ const userSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(register.pending, (state) => {
             state.loading = true;
+            state.error = null;
         });
         builder.addCase(register.fulfilled, (state, action) => {
             state.loading = false;
             state.message = action.payload.message;
+            state.error = null;
         });
         builder.addCase(register.rejected, (state, action) => {
             state.loading = false;
@@ -67,6 +68,7 @@ const userSlice = createSlice({
         });
         builder.addCase(logIn.pending, (state) => {
             state.loading = true;
+            state.error = null;
         });
         builder.addCase(logIn.fulfilled, (state, action) => {
             state.loading = false;

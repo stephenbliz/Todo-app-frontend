@@ -1,8 +1,14 @@
 'use client';
 import { useState, ChangeEvent, FormEvent } from "react"
 import Link from 'next/link';
+import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../redux/store";
+import { register } from "../redux/features/userSlice";
+
 
 export default function RegisterForm(){
+
     const [firstName, setFirstName] = useState('');
     const [middleName, setMiddleName] = useState('');
     const [surname, setSurname] = useState('');
@@ -10,6 +16,11 @@ export default function RegisterForm(){
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('')
     const [email, setEmail] = useState('');
+    const [error, setError] = useState<string>('');
+
+    const dispatch = useDispatch<AppDispatch>();
+    const router = useRouter();
+    const {loading, error: err, message} = useSelector((state: RootState) => state.user);
 
     const forms = [
         {name: 'firstName', type: 'text', icon: 'icon', value: firstName, onchange: (e: ChangeEvent<HTMLInputElement>) => setFirstName(e.target.value), placeholder: 'Enter first name *', id: 1},
@@ -22,13 +33,50 @@ export default function RegisterForm(){
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        console.log(firstName)
-        console.log(middleName)
-        console.log(surname)
-        console.log(email)
-        console.log(password)
-        console.log(confirmPassword)
+        const registerObject = new FormData();
+        registerObject.append('firstName', firstName);
+        registerObject.append('middleName', middleName);
+        registerObject.append('surname', surname);
+        registerObject.append('email', email);
+        registerObject.append('tag', 'user');
+        registerObject.append('password', password);
+        if(image){
+            registerObject.append('image', image);
+        }
+
+        if(password!==confirmPassword){
+            setError('Password mismatch. Please use matching passwords');
+            setPassword('');
+            setConfirmPassword('');
+            return;
+        }
+
+        setError('');
+
+        dispatch(register(registerObject)).then((result)=>{
+            if(result.payload){
+                setConfirmPassword('');
+                setEmail('');
+                setImage(null);
+                setFirstName('');
+                setError('');
+                setPassword('');
+                setSurname('');
+                setMiddleName('');
+                console.log(result.payload);
+                setTimeout(()=>{
+                    router.push('/log-in');
+                }, 3000);
+            }else{
+                throw new Error('Failed to register, check network connection');
+            }
+            
+        }).catch((er)=>{
+            alert(er);
+        })
     }
+
+
     return(
         <form
             className="w-full md:w-[80%] lg:w-[50%] mx-auto bg-white rounded-xl p-4"
@@ -55,7 +103,7 @@ export default function RegisterForm(){
                             type={form.type}
                             name={form.name}
                             id={form.name}
-                            value={`${form.value}`}
+                            value={form.value}
                             required={form.name === 'middleName'? false : true}
                             onChange={form.onchange}
                             placeholder={form.placeholder}
@@ -80,17 +128,42 @@ export default function RegisterForm(){
                     onChange={(e)=>{
                         const files = e.target.files;
                         if(files){
-                            setImage(files[1]);
+                            setImage(files[0]);
                         }
                     }}
                     className="py-2 block px-[3.5rem] border w-full md:w-[50%] lg:w-[60%] h-[2.7rem] border-gray-300 rounded-xl outline-0 focus:border-red-400" 
                 />
             </div>
+            {
+                err && 
+                <div
+                    className="text-red-600 mb-4"
+                >
+                    {err}
+                </div>
+            }
+            {
+                error && 
+                <div
+                    className="text-red-600 mb-4"
+                >
+                    {error}
+                </div>
+            }
+            {
+                message && 
+                <div
+                    className="text-green-600 mb-4"
+                >
+                    {message}
+                </div>
+            }
             <button
                 className="w-fit bg-red-400 mb-4 text-gray-300 rounded-lg px-4 py-2 capitalize cursor-pointer text-sm"
                 type="submit"
+                disabled={loading}
             >
-                register
+                {loading ? 'registering': 'register' }
             </button>
             <div
                 className="flex justify-start gap-2 items-center"

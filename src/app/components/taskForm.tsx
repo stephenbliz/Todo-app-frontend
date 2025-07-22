@@ -16,6 +16,8 @@ export default function TaskForm(){
         return state.todoFields;
     });
 
+    const {error, loading} = useSelector((state: RootState) => state.todo)
+
     const handleSubmit = (e:FormEvent<HTMLFormElement>)=>{
         e.preventDefault();
         const todoObject = new FormData();
@@ -31,23 +33,27 @@ export default function TaskForm(){
             todoObject.forEach((value, key) =>{
                 console.log(key, ':', value);
             })
-            dispatch(updateTodo({id:todoFields.editingId, update:todoObject})).then(()=>{
-                dispatch(setTitle(''));
-                dispatch(setEditingId(null));
-            dispatch(setPriority(''));
-            dispatch(setStatus(''));
-            dispatch(setDescription(''));
-            dispatch(setImageFile(null));
-            router.push('/');
+            dispatch(updateTodo({id:todoFields.editingId, update:todoObject})).then((result)=>{
+                if(result.payload){
+                    dispatch(setTitle(''));
+                    dispatch(setEditingId(null));
+                    dispatch(setPriority(''));
+                    dispatch(setStatus(''));
+                    dispatch(setDescription(''));
+                    dispatch(setImageFile(null));
+                    router.push('/');
+                }
             })
         }else{
-            dispatch(postTodo(todoObject)).then(()=>{
-            dispatch(setTitle(''));
-            dispatch(setPriority(''));
-            dispatch(setStatus(''));
-            dispatch(setDescription(''));
-            dispatch(setImageFile(null));
-            router.push('/');
+            dispatch(postTodo(todoObject)).then((result)=>{
+            if(result.payload){
+                dispatch(setTitle(''));
+                dispatch(setPriority(''));
+                dispatch(setStatus(''));
+                dispatch(setDescription(''));
+                dispatch(setImageFile(null));
+                router.push('/');
+            }
         });
         }
         
@@ -223,9 +229,18 @@ export default function TaskForm(){
                     />
                 </div>
             </div>
+            {
+                error && 
+                <div
+                    className="text-red-600 mb-4"
+                >
+                    {error}
+                </div>
+            }
             <button
                 type="submit"
                 className="absolute -bottom-[4rem] left-[5%] w-fit bg-red-400 text-gray-300 rounded-lg px-4 py-1 capitalize cursor-pointer text-sm"
+                disabled={loading}
             >
                 {todoFields.editingId ? 'update' : 'post'}
             </button>

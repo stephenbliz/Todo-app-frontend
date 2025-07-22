@@ -1,19 +1,49 @@
 'use client';
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../redux/store";
+import { logIn } from "../redux/features/userSlice";
 
 export default function LogInForm(){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    // const [error, setError] = useState('')
+
+    const dispatch = useDispatch<AppDispatch>();
+    const {loading, error} = useSelector((state: RootState) => state.user)
+    const router = useRouter();
 
     const forms = [
         {name: 'email', type: 'email', icon: 'icon', value: email, onchange: (e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value), placeholder: 'Enter email', id: 1},
         {name: 'password', type: 'password', icon: 'icon', value: password, onchange: (e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value), placeholder: 'Enter password', id: 2},
-    ]
+    ];
+    const handleSubmit = (e: FormEvent) => {
+        e.preventDefault();
+        const loginObject = {
+            email,
+            password
+        };
+        dispatch(logIn(loginObject)).then((result)=>{
+            if(result.payload){
+                setEmail('');
+                setPassword('');
+                console.log(result.payload)
+                router.push('/');
+            }else{
+                console.log(result);
+                throw new Error('Failed to log in, check network connection')
+            }
+        }).catch((err) => {
+            alert(err);
+        })
+    }
 
     return(
         <form
             className="w-full md:w-[80%] lg:w-[50%] mx-auto bg-white rounded-xl p-4"
+            onSubmit={(e)=>handleSubmit(e)}
         >
             <h1
                 className="capitalize text-lg md:text-2xl font-semibold mb-8"
@@ -45,11 +75,20 @@ export default function LogInForm(){
                     </div>
                 ))
             }
+            {
+                error && 
+                <div
+                    className="text-red-600 mb-4"
+                >
+                    {error}
+                </div>
+            }
             <button
                 className="w-fit bg-red-400 mb-4 text-gray-300 rounded-lg px-4 py-2 capitalize cursor-pointer text-sm"
                 type="submit"
+                disabled={loading}
             >
-                logIn
+                {loading? 'logging in': 'logIn'}
             </button>
             <div
                 className="flex justify-start gap-2 items-center"
