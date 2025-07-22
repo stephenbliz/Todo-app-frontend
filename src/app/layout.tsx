@@ -32,11 +32,6 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Providers>
-          <nav
-            className="fixed top-0 left-0 w-full h-[14vh] lg-[12vh] z-[1000]"
-          >
-            <Nav />
-          </nav>
           {children}
         </Providers>
       </body>

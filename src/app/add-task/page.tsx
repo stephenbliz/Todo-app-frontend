@@ -6,7 +6,7 @@ export default function AddTask () {
 
     return (
         <section 
-            className="mt-[30%] md:mt-[20%] lg:mt-[6rem] px-2 lg:px-[2rem]"
+            className="py-2 px-2 lg:px-[2rem]"
         >
             <div
                 className="flex justify-between md:w-[80%] mx-auto items-center mb-4"

@@ -16,7 +16,7 @@ export default function Detail({params}: {params:Promise<{todoId: string}>}){
 
     return(
         <div
-            className=" mt-[7rem] p-4"
+            className="p-4"
         >
             {loading && 
                 <div
