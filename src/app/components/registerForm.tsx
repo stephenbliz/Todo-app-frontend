@@ -42,7 +42,7 @@ export default function RegisterForm(){
             {
                 forms.map(form => (
                     <div
-                        className="relative mb-2"
+                        className="relative mb-4"
                         key={form.id}
                     >
                         <label 
@@ -65,7 +65,7 @@ export default function RegisterForm(){
                 ))
             }
             <div
-                className="relative mb-2"
+                className="relative mb-4"
             >
                 <label 
                     htmlFor="image"
@@ -101,7 +101,7 @@ export default function RegisterForm(){
                     Already have an account?
                 </span>
                 <Link
-                    href='/login'
+                    href='/log-in'
                     className="capitalize text-blue-700 w-fit"
                 >
                     sign in
