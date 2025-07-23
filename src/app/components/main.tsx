@@ -15,6 +15,13 @@ export default function Main() {
     const router = useRouter();
 
     useEffect(()=>{
+        const token = localStorage.getItem('token');
+        if(!token){
+            router.push('/log-in');
+        }
+    }, [])
+
+    useEffect(()=>{
         setHasMounted(true);
     },[])
     
