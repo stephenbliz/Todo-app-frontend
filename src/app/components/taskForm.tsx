@@ -16,7 +16,8 @@ export default function TaskForm(){
         return state.todoFields;
     });
 
-    const {error, loading} = useSelector((state: RootState) => state.todo)
+    const {error, loading} = useSelector((state: RootState) => state.todo);
+    const {token} = useSelector((state: RootState) => state.user);
 
     const handleSubmit = (e:FormEvent<HTMLFormElement>)=>{
         e.preventDefault();
@@ -24,6 +25,9 @@ export default function TaskForm(){
         todoObject.append('title', todoFields.title)
         todoObject.append('priority', todoFields.priority)
         todoObject.append('status', todoFields.status)
+        if(token){
+            todoObject.append('userId', token);
+        }
         todoObject.append('description', todoFields.description)
         if(todoFields.imageFile){
             todoObject.append('image', todoFields.imageFile)

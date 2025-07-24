@@ -26,7 +26,7 @@ export const logIn = createAsyncThunk('user/logIn', async (credentials: credenti
         body: JSON.stringify(credentials)
     })
     const data = await res.json();
-    if(data){
+    if(res.ok && data){
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', data.user);
     }
