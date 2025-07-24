@@ -6,6 +6,7 @@ const baseURL = process.env.NEXT_PUBLIC_API_URL;
 if (!baseURL) {
   throw new Error("Missing NEXT_PUBLIC_API_URL environment variable");
 }
+const token = localStorage.getItem('token');
 
 const initialState: todoInitialProp = {
     loading: false,
@@ -14,7 +15,11 @@ const initialState: todoInitialProp = {
 }
 
 export const fetchTodo = createAsyncThunk('todo/fetchTodo', async ()=>{
-    const res = await fetch(baseURL);
+    const res = await fetch(baseURL, {
+        headers: {
+            authorization: `Bearer ${token}`
+        }
+    });
     const data = await res.json();
     return data as myTodoProps[];
 })
@@ -22,6 +27,9 @@ export const fetchTodo = createAsyncThunk('todo/fetchTodo', async ()=>{
 export const postTodo = createAsyncThunk('todo/postTodo', async (todoObject: FormData)=>{
     const res = await fetch(baseURL, {
         method: 'POST',
+        headers: {
+            authorization: `Bearer ${token}`
+        },
         body: todoObject
     });
     const data = await res.json();
@@ -32,6 +40,9 @@ export const postTodo = createAsyncThunk('todo/postTodo', async (todoObject: For
 export const updateTodo = createAsyncThunk('todo/updateTodo', async ({id, update}:{id: string; update: FormData}) => {
     const res = await fetch(`${baseURL}${id}`, {
         method: 'PUT',
+        headers: {
+            authorization: `Bearer ${token}`
+        },
         body: update
     });
     const data = await res.json();
@@ -40,7 +51,10 @@ export const updateTodo = createAsyncThunk('todo/updateTodo', async ({id, update
 
 export const deleteTodo = createAsyncThunk('todo/deleteTodo', async (id: string) => {
     const res = await fetch(`${baseURL}${id}`,{
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {
+            authorization: `Bearer ${token}`
+        }
     });
     const data = await res.json();
     return data;
