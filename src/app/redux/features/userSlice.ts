@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import { credentialsProps, userInitialProps } from "@/app/utils/types";
 
 const initialState: userInitialProps = {
@@ -10,8 +10,10 @@ const initialState: userInitialProps = {
     message: null
 }
 
+const baseURL = process.env.NEXT_PUBLIC_API_URL;
+
 export const register = createAsyncThunk('user/register', async (credentials: any)=>{
-    const res = await fetch('http://localhost:4000/api/register',{
+    const res = await fetch(`${baseURL}register`,{
         method: 'POST',
         body: credentials
     })
@@ -20,7 +22,7 @@ export const register = createAsyncThunk('user/register', async (credentials: an
 })
 
 export const logIn = createAsyncThunk('user/logIn', async (credentials: credentialsProps)=>{
-    const res = await fetch('http://localhost:4000/api/login', {
+    const res = await fetch(`${baseURL}login`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(credentials)
@@ -28,7 +30,7 @@ export const logIn = createAsyncThunk('user/logIn', async (credentials: credenti
     const data = await res.json();
     if(res.ok && data){
         localStorage.setItem('token', data.token);
-        localStorage.setItem('user', data.user);
+        localStorage.setItem('user', JSON.stringify(data.user));
     }
     return data;
 })

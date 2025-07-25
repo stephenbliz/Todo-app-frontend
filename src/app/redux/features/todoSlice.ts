@@ -6,7 +6,7 @@ const baseURL = process.env.NEXT_PUBLIC_API_URL;
 if (!baseURL) {
   throw new Error("Missing NEXT_PUBLIC_API_URL environment variable");
 }
-const token = localStorage.getItem('token');
+
 
 const initialState: todoInitialProp = {
     loading: false,
@@ -15,7 +15,11 @@ const initialState: todoInitialProp = {
 }
 
 export const fetchTodo = createAsyncThunk('todo/fetchTodo', async ()=>{
-    const res = await fetch(baseURL, {
+    let token = '';
+    if(typeof window !== 'undefined') {
+        token = localStorage.getItem('token') || '';
+    }
+    const res = await fetch(`${baseURL}todo`, {
         headers: {
             authorization: `Bearer ${token}`
         }
@@ -25,7 +29,11 @@ export const fetchTodo = createAsyncThunk('todo/fetchTodo', async ()=>{
 })
 
 export const postTodo = createAsyncThunk('todo/postTodo', async (todoObject: FormData)=>{
-    const res = await fetch(baseURL, {
+    let token = '';
+    if(typeof window !== 'undefined') {
+        token = localStorage.getItem('token') || '';
+    }
+    const res = await fetch(`${baseURL}todo`, {
         method: 'POST',
         headers: {
             authorization: `Bearer ${token}`
@@ -38,7 +46,11 @@ export const postTodo = createAsyncThunk('todo/postTodo', async (todoObject: For
 })
 
 export const updateTodo = createAsyncThunk('todo/updateTodo', async ({id, update}:{id: string; update: FormData}) => {
-    const res = await fetch(`${baseURL}${id}`, {
+    let token = '';
+    if(typeof window !== 'undefined') {
+        token = localStorage.getItem('token') || '';
+    }
+    const res = await fetch(`${baseURL}todo/${id}`, {
         method: 'PUT',
         headers: {
             authorization: `Bearer ${token}`
@@ -50,7 +62,11 @@ export const updateTodo = createAsyncThunk('todo/updateTodo', async ({id, update
 })
 
 export const deleteTodo = createAsyncThunk('todo/deleteTodo', async (id: string) => {
-    const res = await fetch(`${baseURL}${id}`,{
+    let token = '';
+    if(typeof window !== 'undefined') {
+        token = localStorage.getItem('token') || '';
+    }
+    const res = await fetch(`${baseURL}todo/${id}`,{
         method: 'DELETE',
         headers: {
             authorization: `Bearer ${token}`
@@ -67,6 +83,8 @@ const todoSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(fetchTodo.pending, (state) => {
             state.loading = true;
+            state.data = [];
+            state.error = '';
         })
         builder.addCase(fetchTodo.fulfilled, (state, action: PayloadAction<myTodoProps[]>) => {
             state.loading = false;
@@ -75,10 +93,12 @@ const todoSlice = createSlice({
         })
         builder.addCase(fetchTodo.rejected, (state, action) => {
             state.loading = false;
+            state.data = [];
             state.error = action.error.message || 'Something went wrong';
         });
         builder.addCase(postTodo.pending, (state)=>{
             state.loading = true;
+            state.error = '';
         })
         builder.addCase(postTodo.fulfilled, (state, action: PayloadAction<myTodoProps>) => {
             state.loading = false;
@@ -92,6 +112,7 @@ const todoSlice = createSlice({
         })
         builder.addCase(updateTodo.pending, state => {
             state.loading = true;
+            state.error = '';
         })
         builder.addCase(updateTodo.fulfilled, (state, action: PayloadAction<myTodoProps>) => {
             state.loading = false;
@@ -99,6 +120,7 @@ const todoSlice = createSlice({
             if(index !== -1){
                 state.data[index] = action.payload;
             }
+            state.error = '';
         })
         builder.addCase(updateTodo.rejected, (state, action) => {
             state.loading = false;
@@ -106,11 +128,13 @@ const todoSlice = createSlice({
         })
         builder.addCase(deleteTodo.pending, state => {
             state.loading = true;
+            state.error = '';
         })
         builder.addCase(deleteTodo.fulfilled, (state, action: PayloadAction<myTodoProps>) => {
             state.loading = false;
             const filtered = state.data.filter(todo => todo._id !== action.payload._id);
             state.data = filtered;
+            state.error = '';
         })
         builder.addCase(deleteTodo.rejected, (state, action) => {
             state.loading = false;

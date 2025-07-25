@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { fetchTodo } from "../redux/features/todoSlice";
 import type { RootState, AppDispatch } from "../redux/store";
+import { logOut } from "../redux/features/userSlice";
 
 export default function Main() {
 
@@ -13,6 +14,8 @@ export default function Main() {
     const [hasMounted, setHasMounted] = useState(false);
     const dispatch = useDispatch<AppDispatch>();
     const router = useRouter();
+    const {loading, error, data} = useSelector((state: RootState)=> state.todo);
+    const {user} = useSelector((state: RootState) => state.user);
 
     useEffect(()=>{
         const token = localStorage.getItem('token');
@@ -29,7 +32,10 @@ export default function Main() {
         dispatch(fetchTodo());
     }, [dispatch])
 
-    const {loading, error, data} = useSelector((state: RootState)=> state.todo);
+    const handleLogOut = ()=> {
+        dispatch(logOut());
+        router.push('/log-in');
+    }
 
     return(
         <section
@@ -38,6 +44,22 @@ export default function Main() {
             <section
                 className="lg:col-span-4 border border-gray-300 rounded p-4 shadow-gray-300 shadow-sm overflow-y-scroll max-h-[80vh]"
             >
+                <div
+                    className="flex justify-between items-center mb-4 flex-wrap"
+                >
+                    <div
+                        className="w-fit"
+                    >
+                        <span>Welcome back</span> <span className="font-semibold uppercase">{user?.firstName}</span>
+                    </div>
+                    <div
+                        className="text-red-400 capitalize cursor-pointer w-fit"
+                        onClick={()=> handleLogOut()}
+                    >
+                        log out
+                    </div>
+                </div>
+                
                 <div
                     className="flex justify-between items-center mb-4"
                 >
@@ -66,7 +88,7 @@ export default function Main() {
                             Loading...
                         </div>
                     }
-                    {data && 
+                    {data && data.length !== 0 &&
                         <Todo
                             myTodos ={data}
                             setId = {setId}
