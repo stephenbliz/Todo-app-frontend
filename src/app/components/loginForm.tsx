@@ -96,7 +96,7 @@ export default function LogInForm(){
                 <span
                     className="w-fit"
                 >
-                    Don't have an account?
+                    Don&apos;t have an account?
                 </span>
                 <Link
                     href='/register'

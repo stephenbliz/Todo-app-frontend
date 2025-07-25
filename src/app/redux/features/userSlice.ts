@@ -12,7 +12,7 @@ const initialState: userInitialProps = {
 
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
-export const register = createAsyncThunk('user/register', async (credentials: any)=>{
+export const register = createAsyncThunk('user/register', async (credentials: FormData)=>{
     const res = await fetch(`${baseURL}register`,{
         method: 'POST',
         body: credentials

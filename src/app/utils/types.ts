@@ -31,8 +31,16 @@ export interface todoFieldsInitialProp{
     editingId: string | null
     imageFile: File | null
 }
+export interface userProps{
+    firstName: string
+    surname: string
+    image: string | null
+    tag: string
+    email: string
+    middleName: string
+}
 export interface userInitialProps{
-    user: any
+    user: userProps | null
     loading: boolean
     isAuthenticated: boolean
     token: string | null
