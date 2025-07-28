@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction} from "@reduxjs/toolkit";
 import { todoInitialProp, myTodoProps } from "@/app/utils/types";
 import { logOut } from "./userSlice";
+import { RootState } from "../store";
 
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -15,11 +16,10 @@ const initialState: todoInitialProp = {
     error: ''
 }
 
-export const fetchTodo = createAsyncThunk('todo/fetchTodo', async (j, {dispatch, rejectWithValue})=>{
-    let token = '';
-    if(typeof window !== 'undefined') {
-        token = localStorage.getItem('token') || '';
-    }
+export const fetchTodo = createAsyncThunk('todo/fetchTodo', async (j, {dispatch, rejectWithValue, getState})=>{
+    const state = getState() as RootState;
+    const token = state.user.token;
+
     const res = await fetch(`${baseURL}todo`, {
         headers: {
             authorization: `Bearer ${token}`
@@ -33,11 +33,10 @@ export const fetchTodo = createAsyncThunk('todo/fetchTodo', async (j, {dispatch,
     return data as myTodoProps[];
 })
 
-export const postTodo = createAsyncThunk('todo/postTodo', async (todoObject: FormData)=>{
-    let token = '';
-    if(typeof window !== 'undefined') {
-        token = localStorage.getItem('token') || '';
-    }
+export const postTodo = createAsyncThunk('todo/postTodo', async (todoObject: FormData, {getState, dispatch, rejectWithValue})=>{
+    const state = getState() as RootState;
+    const token = state.user.token;
+
     const res = await fetch(`${baseURL}todo`, {
         method: 'POST',
         headers: {
@@ -45,16 +44,19 @@ export const postTodo = createAsyncThunk('todo/postTodo', async (todoObject: For
         },
         body: todoObject
     });
+    if(res.status === 401){
+        dispatch(logOut());
+        return rejectWithValue('Unauthorized');
+    }
     const data = await res.json();
     return data;
 
 })
 
-export const updateTodo = createAsyncThunk('todo/updateTodo', async ({id, update}:{id: string; update: FormData}) => {
-    let token = '';
-    if(typeof window !== 'undefined') {
-        token = localStorage.getItem('token') || '';
-    }
+export const updateTodo = createAsyncThunk('todo/updateTodo', async ({id, update}:{id: string; update: FormData}, {getState, dispatch, rejectWithValue}) => {
+    const state = getState() as RootState;
+    const token = state.user.token;
+
     const res = await fetch(`${baseURL}todo/${id}`, {
         method: 'PUT',
         headers: {
@@ -62,21 +64,28 @@ export const updateTodo = createAsyncThunk('todo/updateTodo', async ({id, update
         },
         body: update
     });
+    if(res.status === 401){
+        dispatch(logOut());
+        return rejectWithValue('Unauthorized');
+    }
     const data = await res.json();
     return data;
 })
 
-export const deleteTodo = createAsyncThunk('todo/deleteTodo', async (id: string) => {
-    let token = '';
-    if(typeof window !== 'undefined') {
-        token = localStorage.getItem('token') || '';
-    }
+export const deleteTodo = createAsyncThunk('todo/deleteTodo', async (id: string, {getState, dispatch, rejectWithValue}) => {
+    const state = getState() as RootState;
+    const token = state.user.token;
+
     const res = await fetch(`${baseURL}todo/${id}`,{
         method: 'DELETE',
         headers: {
             authorization: `Bearer ${token}`
         }
     });
+    if(res.status === 401){
+        dispatch(logOut());
+        return rejectWithValue('Unauthorized');
+    }
     const data = await res.json();
     return data;
 })
