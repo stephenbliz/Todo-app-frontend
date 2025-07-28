@@ -25,7 +25,7 @@ export default function RegisterForm(){
 
     const dispatch = useDispatch<AppDispatch>();
     const router = useRouter();
-    const {loading, error: err, message} = useSelector((state: RootState) => state.user);
+    const {loading, error: err} = useSelector((state: RootState) => state.user);
 
     const forms = [
         {name: 'firstName', type: 'text', icon: <MdPerson />, value: firstName, onchange: (e: ChangeEvent<HTMLInputElement>) => setFirstName(e.target.value), placeholder: 'Enter first name *', id: 1},
