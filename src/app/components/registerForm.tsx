@@ -5,6 +5,11 @@ import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
 import { register } from "../redux/features/userSlice";
+import { MdPerson } from "react-icons/md";
+import { MdEmail } from "react-icons/md";
+import { MdLock } from "react-icons/md";
+import { MdLockOutline } from "react-icons/md";
+import { FaImage } from "react-icons/fa";
 
 
 export default function RegisterForm(){
@@ -23,12 +28,12 @@ export default function RegisterForm(){
     const {loading, error: err, message} = useSelector((state: RootState) => state.user);
 
     const forms = [
-        {name: 'firstName', type: 'text', icon: 'icon', value: firstName, onchange: (e: ChangeEvent<HTMLInputElement>) => setFirstName(e.target.value), placeholder: 'Enter first name *', id: 1},
-        {name: 'middleName', type: 'text', icon: 'icon', value: middleName, onchange: (e: ChangeEvent<HTMLInputElement>) => setMiddleName(e.target.value), placeholder: 'Enter middle name', id: 2},
-        {name: 'surname', type: 'text', icon: 'icon', value: surname, onchange: (e: ChangeEvent<HTMLInputElement>) => setSurname(e.target.value), placeholder: 'Enter surname *', id: 3},
-        {name: 'email', type: 'email', icon: 'icon', value: email, onchange: (e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value), placeholder: 'Enter email *', id: 4},
-        {name: 'password', type: 'password', icon: 'icon', value: password, onchange: (e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value), placeholder: 'Enter password *', id: 5},
-        {name: 'confirmPassword', type: 'password', icon: 'icon', value: confirmPassword, onchange: (e: ChangeEvent<HTMLInputElement>) => setConfirmPassword(e.target.value), placeholder: 'Enter confirm password *', id: 6},
+        {name: 'firstName', type: 'text', icon: <MdPerson />, value: firstName, onchange: (e: ChangeEvent<HTMLInputElement>) => setFirstName(e.target.value), placeholder: 'Enter first name *', id: 1},
+        {name: 'middleName', type: 'text', icon: <MdPerson />, value: middleName, onchange: (e: ChangeEvent<HTMLInputElement>) => setMiddleName(e.target.value), placeholder: 'Enter middle name', id: 2},
+        {name: 'surname', type: 'text', icon:<MdPerson />, value: surname, onchange: (e: ChangeEvent<HTMLInputElement>) => setSurname(e.target.value), placeholder: 'Enter surname *', id: 3},
+        {name: 'email', type: 'email', icon: <MdEmail />, value: email, onchange: (e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value), placeholder: 'Enter email *', id: 4},
+        {name: 'password', type: 'password', icon: <MdLock />, value: password, onchange: (e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value), placeholder: 'Enter password *', id: 5},
+        {name: 'confirmPassword', type: 'password', icon: <MdLockOutline />, value: confirmPassword, onchange: (e: ChangeEvent<HTMLInputElement>) => setConfirmPassword(e.target.value), placeholder: 'Enter confirm password *', id: 6},
     ];
 
     const handleSubmit = (e: FormEvent) => {
@@ -63,10 +68,10 @@ export default function RegisterForm(){
                 setPassword('');
                 setSurname('');
                 setMiddleName('');
-                console.log(result.payload);
+                alert('Registration successfull, log in to continue.');
                 setTimeout(()=>{
                     router.push('/log-in');
-                }, 3000);
+                }, 1000);
             }else{
                 throw new Error('Failed to register, check network connection');
             }
@@ -95,7 +100,7 @@ export default function RegisterForm(){
                     >
                         <label 
                             htmlFor={form.name}
-                            className="absolute top-2 left-4"
+                            className="absolute top-3.5 left-4 "
                         >
                             {form.icon}
                         </label>
@@ -107,7 +112,7 @@ export default function RegisterForm(){
                             required={form.name === 'middleName'? false : true}
                             onChange={form.onchange}
                             placeholder={form.placeholder}
-                            className="py-2 block px-[3.5rem] border w-full border-gray-300 rounded-xl outline-0 focus:border-red-400" 
+                            className="py-2 block px-[3rem] border w-full border-gray-300 rounded-xl outline-0 focus:border-red-400" 
                         />
                     </div>
                 ))
@@ -117,9 +122,9 @@ export default function RegisterForm(){
             >
                 <label 
                     htmlFor="image"
-                    className="absolute top-2 left-4"
+                    className="absolute top-3.5 left-4"
                 >
-                    icon
+                    <FaImage />
                 </label>
                 <input 
                     type="file"
@@ -148,14 +153,6 @@ export default function RegisterForm(){
                     className="text-red-600 mb-4"
                 >
                     {error}
-                </div>
-            }
-            {
-                message && 
-                <div
-                    className="text-green-600 mb-4"
-                >
-                    {message}
                 </div>
             }
             <button

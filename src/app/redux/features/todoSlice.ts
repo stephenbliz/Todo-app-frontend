@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction} from "@reduxjs/toolkit";
 import { todoInitialProp, myTodoProps } from "@/app/utils/types";
+import { logOut } from "./userSlice";
 
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -14,7 +15,7 @@ const initialState: todoInitialProp = {
     error: ''
 }
 
-export const fetchTodo = createAsyncThunk('todo/fetchTodo', async ()=>{
+export const fetchTodo = createAsyncThunk('todo/fetchTodo', async (j, {dispatch, rejectWithValue})=>{
     let token = '';
     if(typeof window !== 'undefined') {
         token = localStorage.getItem('token') || '';
@@ -24,6 +25,10 @@ export const fetchTodo = createAsyncThunk('todo/fetchTodo', async ()=>{
             authorization: `Bearer ${token}`
         }
     });
+    if(res.status === 401){
+        dispatch(logOut());
+        return rejectWithValue('Unauthorized');
+    }
     const data = await res.json();
     return data as myTodoProps[];
 })

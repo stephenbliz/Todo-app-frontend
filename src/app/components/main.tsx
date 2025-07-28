@@ -88,7 +88,12 @@ export default function Main() {
                             Loading...
                         </div>
                     }
-                    {data && data.length !== 0 &&
+                    {data && data.length < 1 &&
+                        <div>
+                            No task found...
+                        </div>
+                    }
+                    {data && data.length >= 1 &&
                         <Todo
                             myTodos ={data}
                             setId = {setId}
@@ -109,7 +114,7 @@ export default function Main() {
             <section
                 className="lg:col-span-6 border hidden lg:block border-gray-300 rounded p-4 shadow-gray-300 shadow-sm overflow-y-scroll max-h-[80vh]"
             >
-                {data &&
+                {data && data.length >= 1 &&
                     <TodoDetail 
                         myTodos ={data}
                         id = {id}

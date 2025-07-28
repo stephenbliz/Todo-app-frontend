@@ -11,9 +11,6 @@ export default function Todo ({myTodos, setId, hasMounted}: TodoProps) {
     return(
         <>
         {
-            myTodos.length < 1 ?
-            <div>No task found...</div>
-            :
             myTodos.map((mytodo)=>{
                 console.log(mytodo);
                 const priority = mytodo.priority!;

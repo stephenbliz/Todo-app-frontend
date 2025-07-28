@@ -5,19 +5,20 @@ import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../redux/store";
 import { logIn } from "../redux/features/userSlice";
+import { MdEmail } from "react-icons/md";
+import { MdLock } from "react-icons/md";
 
 export default function LogInForm(){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    // const [error, setError] = useState('')
 
     const dispatch = useDispatch<AppDispatch>();
     const {loading, error} = useSelector((state: RootState) => state.user)
     const router = useRouter();
 
     const forms = [
-        {name: 'email', type: 'email', icon: 'icon', value: email, onchange: (e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value), placeholder: 'Enter email', id: 1},
-        {name: 'password', type: 'password', icon: 'icon', value: password, onchange: (e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value), placeholder: 'Enter password', id: 2},
+        {name: 'email', type: 'email', icon: <MdEmail />, value: email, onchange: (e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value), placeholder: 'Enter email', id: 1},
+        {name: 'password', type: 'password', icon: <MdLock />, value: password, onchange: (e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value), placeholder: 'Enter password', id: 2},
     ];
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
@@ -29,7 +30,6 @@ export default function LogInForm(){
             if(result.payload){
                 setEmail('');
                 setPassword('');
-                console.log(result.payload)
                 router.push('/');
             }else{
                 console.log(result);
@@ -58,7 +58,7 @@ export default function LogInForm(){
                     >
                         <label 
                             htmlFor={form.name}
-                            className="absolute top-2 left-4"
+                            className="absolute top-3.5 left-4"
                         >
                             {form.icon}
                         </label>
