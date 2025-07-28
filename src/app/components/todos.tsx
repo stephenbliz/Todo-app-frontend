@@ -12,7 +12,6 @@ export default function Todo ({myTodos, setId, hasMounted}: TodoProps) {
         <>
         {
             myTodos.map((mytodo)=>{
-                console.log(mytodo);
                 const priority = mytodo.priority!;
                 const status = mytodo.status!;
                 const priorityColor = handlePriorityColor(priority);

@@ -29,7 +29,11 @@ export default function Main() {
     },[])
     
     useEffect(()=>{
-        dispatch(fetchTodo());
+        dispatch(fetchTodo()).then((result)=>{
+            if(result.meta.requestStatus === 'rejected'){
+                router.push('/log-in');
+            }
+        });
     }, [dispatch])
 
     const handleLogOut = ()=> {
