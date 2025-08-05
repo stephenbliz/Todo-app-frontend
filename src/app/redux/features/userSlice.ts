@@ -13,7 +13,7 @@ const initialState: userInitialProps = {
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
 export const register = createAsyncThunk('user/register', async (credentials: FormData)=>{
-    const res = await fetch(`${baseURL}register`,{
+    const res = await fetch(`${baseURL}api/register`,{
         method: 'POST',
         body: credentials
     })
@@ -22,7 +22,7 @@ export const register = createAsyncThunk('user/register', async (credentials: Fo
 })
 
 export const logIn = createAsyncThunk('user/logIn', async (credentials: credentialsProps)=>{
-    const res = await fetch(`${baseURL}login`, {
+    const res = await fetch(`${baseURL}api/login`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(credentials)

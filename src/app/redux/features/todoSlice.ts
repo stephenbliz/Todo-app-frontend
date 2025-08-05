@@ -20,7 +20,7 @@ export const fetchTodo = createAsyncThunk('todo/fetchTodo', async (j, {dispatch,
     const state = getState() as RootState;
     const token = state.user.token;
 
-    const res = await fetch(`${baseURL}todo`, {
+    const res = await fetch(`${baseURL}api/todo`, {
         headers: {
             authorization: `Bearer ${token}`
         }
@@ -37,7 +37,7 @@ export const postTodo = createAsyncThunk('todo/postTodo', async (todoObject: For
     const state = getState() as RootState;
     const token = state.user.token;
 
-    const res = await fetch(`${baseURL}todo`, {
+    const res = await fetch(`${baseURL}api/todo`, {
         method: 'POST',
         headers: {
             authorization: `Bearer ${token}`
@@ -57,7 +57,7 @@ export const updateTodo = createAsyncThunk('todo/updateTodo', async ({id, update
     const state = getState() as RootState;
     const token = state.user.token;
 
-    const res = await fetch(`${baseURL}todo/${id}`, {
+    const res = await fetch(`${baseURL}api/todo/${id}`, {
         method: 'PUT',
         headers: {
             authorization: `Bearer ${token}`
@@ -76,7 +76,7 @@ export const deleteTodo = createAsyncThunk('todo/deleteTodo', async (id: string,
     const state = getState() as RootState;
     const token = state.user.token;
 
-    const res = await fetch(`${baseURL}todo/${id}`,{
+    const res = await fetch(`${baseURL}api/todo/${id}`,{
         method: 'DELETE',
         headers: {
             authorization: `Bearer ${token}`
