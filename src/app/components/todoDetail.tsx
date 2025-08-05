@@ -39,7 +39,7 @@ export default function TodoDetail ({myTodos, id}: TodoDetailProps) {
     return (
         <>
         {todo ? <div
-            className="relative"
+            className="relative pb-[2rem]"
         >
             <div
                 className="flex mb-8 mt-[2rem] lg:mt-0 items-start lg:items-end justify-start gap-4"
@@ -96,19 +96,23 @@ export default function TodoDetail ({myTodos, id}: TodoDetailProps) {
                 go back
             </Link>
             <div
-                className="flex w-[20%] fixed bottom-8 right-0 justify-center items-center gap-[5%]"
+                className="flex w-fit absolute bottom-0 right-0 justify-center items-center gap-[2rem]"
             >
                 <div
                     className="w-fit bg-red-400 p-1 border border-red-400 cursor-pointer rounded-lg text-gray-200"
                     onClick={()=> dispatch(deleteTodo(id))}
                 >
-                    <MdDelete />
+                    <MdDelete 
+                        className="text-[1.5rem] lg:text-[1.3rem]"
+                    />
                 </div>
                 <div
                     className="w-fit bg-red-400 p-1 border border-red-400 cursor-pointer rounded-lg text-gray-200"
                     onClick={()=>handleEdit(todo)}
                 >
-                    <MdEdit />
+                    <MdEdit
+                        className="text-[1.5rem] lg:text-[1.3rem]" 
+                    />
                 </div>
             </div>
         </div> : 
@@ -117,7 +121,7 @@ export default function TodoDetail ({myTodos, id}: TodoDetailProps) {
         >
             <Link
                 href='/'
-                className="capitalize underline font-semibold text-sm lg:hidden "
+                className="capitalize underline font-semibold text-lg lg:hidden "
             >
                 go back
             </Link>
