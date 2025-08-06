@@ -25,7 +25,7 @@ export default function RegisterForm(){
 
     const dispatch = useDispatch<AppDispatch>();
     const router = useRouter();
-    const {loading, error: err} = useSelector((state: RootState) => state.user);
+    const {loading} = useSelector((state: RootState) => state.user);
 
     const forms = [
         {name: 'firstName', type: 'text', icon: <MdPerson />, value: firstName, onchange: (e: ChangeEvent<HTMLInputElement>) => setFirstName(e.target.value), placeholder: 'Enter first name *', id: 1},
@@ -73,22 +73,23 @@ export default function RegisterForm(){
                     router.push('/log-in');
                 }, 1000);
             }else{
-                throw new Error('Failed to register, check network connection');
+                throw new Error('Something went wrong');
             }
             
         }).catch((er)=>{
             alert(er);
+            setError(er)
         })
     }
 
 
     return(
         <form
-            className="w-full md:w-[80%] lg:w-[50%] mx-auto bg-white rounded-xl p-4"
+            className="w-full md:w-[80%] lg:w-[50%] mx-auto mt-[3.5rem] bg-white rounded-xl p-4"
             onSubmit={(e)=>handleSubmit(e)}
         >
             <h1
-                className="capitalize text-lg md:text-2xl font-semibold mb-8"
+                className="capitalize text-xl md:text-2xl font-semibold mb-8"
             >
                 sign up
             </h1>
@@ -140,14 +141,6 @@ export default function RegisterForm(){
                 />
             </div>
             {
-                err && 
-                <div
-                    className="text-red-600 mb-4"
-                >
-                    {err}
-                </div>
-            }
-            {
                 error && 
                 <div
                     className="text-red-600 mb-4"
@@ -156,7 +149,7 @@ export default function RegisterForm(){
                 </div>
             }
             <button
-                className="w-fit bg-red-400 mb-4 text-gray-300 rounded-lg px-4 py-2 capitalize cursor-pointer text-sm"
+                className="w-fit bg-red-400 mb-4 text-gray-300 rounded-lg px-4 py-2 capitalize cursor-pointer"
                 type="submit"
                 disabled={loading}
             >

@@ -4,6 +4,7 @@ import { Providers } from "./provider";
 import AppInitializer from "./components/appInitializer";
 import "./globals.css";
 import LoadingBar from "./components/loadingBar";
+import Nav from "./components/nav";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,6 +34,7 @@ export default function RootLayout({
         <LoadingBar />
         <Providers>
           <AppInitializer />
+          <Nav />
           {children}
         </Providers>
       </body>

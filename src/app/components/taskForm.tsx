@@ -69,7 +69,7 @@ export default function TaskForm(){
             >
                 <label 
                     htmlFor="title"
-                    className="font-semibold capitalize block mb-2 text-sm"
+                    className="text-xl capitalize block mb-2 "
                 >
                     title
                 </label>
@@ -79,14 +79,14 @@ export default function TaskForm(){
                     onChange={(e)=> dispatch(setTitle(e.target.value))}
                     value={todoFields.title}
                     id="title"
-                    className="border cursor-pointer border-gray-400 w-full text-gray-500 text-sm block outline-none focus:border-blue-400 rounded-lg py-1 px-4"
+                    className="border cursor-pointer border-gray-400 w-full text-gray-500 block outline-none focus:border-blue-400 rounded-lg py-1 px-4"
                 />
             </div>
             <div
                 className="w-full lg:w-[60%] mb-4"
             >
                 <div 
-                    className="font-semibold capitalize mb-2 text-sm"
+                    className="text-xl capitalize mb-2"
                 >
                     priority
                 </div>
@@ -116,7 +116,7 @@ export default function TaskForm(){
                                     key={prior}
                                 >
                                     <span className={`w-1.5 h-1.5 rounded-full block ${radioColor}`}></span> 
-                                    <span className="capitalize text-sm">{prior}</span>
+                                    <span className="capitalize">{prior}</span>
                                     <input 
                                         type="radio"
                                         name={prior} 
@@ -137,7 +137,7 @@ export default function TaskForm(){
                 className="w-full lg:w-[60%] mb-4"
             >
                 <div 
-                    className="font-semibold capitalize mb-2 text-sm"
+                    className="text-xl capitalize mb-2"
                 >
                     status
                 </div>
@@ -167,7 +167,7 @@ export default function TaskForm(){
                                     key={stat}
                                 >
                                     <span className={`w-1.5 h-1.5 rounded-full block ${statColor}`}></span> 
-                                    <span className="capitalize text-sm">{stat}</span>
+                                    <span className="capitalize ">{stat}</span>
                                     <input 
                                         type="radio"
                                         name={stat} 
@@ -192,7 +192,7 @@ export default function TaskForm(){
                 >
                     <label 
                         htmlFor="description"
-                        className="font-semibold capitalize block mb-2 text-sm"
+                        className="text-xl capitalize block mb-2"
                     >
                         task description
                     </label>
@@ -202,7 +202,7 @@ export default function TaskForm(){
                         value={todoFields.description}
                         id="title"
                         placeholder="Start writing here..."
-                        className="border border-gray-400 cursor-pointer w-full h-[10rem] text-gray-500 text-sm block outline-none focus:border-blue-400 rounded-lg py-1 px-4"
+                        className="border border-gray-400 cursor-pointer w-full h-[10rem] text-gray-500  block outline-none focus:border-blue-400 rounded-lg py-1 px-4"
                     />
                 </div>
                 <div
@@ -210,7 +210,7 @@ export default function TaskForm(){
                 >
                     <label 
                         htmlFor="image"
-                        className="font-semibold capitalize block mb-2 text-sm"
+                        className="text-xl capitalize block mb-2 "
                     >
                         upload image
                     </label>
@@ -225,7 +225,7 @@ export default function TaskForm(){
                             }
                         }}
                         id="image"
-                        className="border cursor-pointer border-gray-400 w-full h-[5rem] lg:h-[10rem] text-gray-500 text-sm block outline-none focus:border-blue-400 rounded-lg py-1 px-4"
+                        className="border cursor-pointer border-gray-400 w-full h-[5rem] lg:h-[10rem] text-gray-500 block outline-none focus:border-blue-400 rounded-lg py-1 px-4"
                     />
                 </div>
             </div>
@@ -237,13 +237,20 @@ export default function TaskForm(){
                     {error}
                 </div>
             }
+            {loading ? <button
+                type="submit"
+                className="absolute -bottom-[4rem] left-[5%] w-fit bg-red-400 text-gray-300 rounded-lg px-4 py-1 capitalize cursor-pointer "
+                disabled={loading}
+            >
+                {todoFields.editingId ? 'updating' : 'posting'}
+            </button>:
             <button
                 type="submit"
-                className="absolute -bottom-[4rem] left-[5%] w-fit bg-red-400 text-gray-300 rounded-lg px-4 py-1 capitalize cursor-pointer text-sm"
+                className="absolute -bottom-[4rem] left-[5%] w-fit bg-red-400 text-gray-300 rounded-lg px-4 py-1 capitalize cursor-pointer"
                 disabled={loading}
             >
                 {todoFields.editingId ? 'update' : 'post'}
-            </button>
+            </button>}
         </form>
     )
 }

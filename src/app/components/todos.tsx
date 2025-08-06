@@ -70,7 +70,7 @@ export default function Todo ({myTodos, setId, hasMounted}: TodoProps) {
                                     {mytodo.title}
                                 </h3>
                                 <p
-                                    className="text-sm md:text-xl lg:text-sm text-gray-500 mb-4"
+                                    className="text-gray-500 mb-4"
                                 >
                                     {mytodo.description.substring(0, 100)}
                                 </p>

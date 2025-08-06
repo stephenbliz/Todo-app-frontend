@@ -59,39 +59,39 @@ export default function TodoDetail ({myTodos, id}: TodoDetailProps) {
                     className="w-fit"
                 >
                     <h1
-                        className="text-[1rem] cursor-pointer font-semibold capitalize mb-2"
+                        className="text-lg cursor-pointer font-semibold capitalize mb-2"
                     >
                        {todo.title}
                     </h1>
 
                     <div
-                        className="capitalize mb-1 text-[0.8rem] md:text-xl lg:text-[0.8rem]"
+                        className="capitalize mb-1 text-[1rem] md:text-xl "
                     >
                         <span>priority: <span className={`${priorityColor}`}>{todo.priority}</span></span>
                         
                     </div>
 
                     <div
-                        className="capitalize mb-1 text-[0.8rem] md:text-xl lg:text-[0.8rem]"
+                        className="capitalize mb-1 text-[1rem] md:text-xl "
                     >
                         <span>status: <span className={`${statusColor}`}>{todo.status}</span></span>
                         
                     </div>
                     <div
-                        className="text-gray-500 text-[0.8rem] md:text-xl lg:text-[0.8rem]"
+                        className="text-gray-500 text-[1rem] md:text-xl "
                     >
                         Created {DateFormat(todo.createdAt)}
                     </div>
                 </div>
             </div>
             <p
-                className="text-sm md:text-xl lg:text-sm text-gray-500 mb-4"
+                className="text-gray-500 mb-4"
             >
                {todo.description}
             </p>
             <Link
                 href='/'
-                className="capitalize underline font-semibold text-sm lg:hidden absolute top-0 right-0"
+                className="capitalize underline font-semibold text-lg lg:hidden absolute -top-[30%] right-0"
             >
                 go back
             </Link>
@@ -117,11 +117,11 @@ export default function TodoDetail ({myTodos, id}: TodoDetailProps) {
             </div>
         </div> : 
         <div
-            className="mt-[2rem] lg:mt-0"
+            className="mt-[2rem] lg:mt-0 text-lg"
         >
             <Link
                 href='/'
-                className="capitalize underline font-semibold text-lg lg:hidden "
+                className="capitalize underline font-semibold lg:hidden "
             >
                 go back
             </Link>

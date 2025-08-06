@@ -1,20 +1,23 @@
 'use client';
 import { useState, useEffect } from "react";
-import { CiSearch } from "react-icons/ci";
-import { AiOutlineBell } from "react-icons/ai";
-import { SlCalender } from "react-icons/sl";
+import type { RootState, AppDispatch } from "../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { logOut } from "../redux/features/userSlice";
+import { useRouter } from "next/navigation";
 
 export default function Nav() {
-    const [searchTask, setSearchTask] = useState('');
     const [day, setDay] = useState('');
     const [date, setDate] = useState('');
     const [year, setYear] = useState<number | null>(null);
     const [month, setMonth] = useState('');
 
-    const handleSubmit = (e:React.FormEvent<HTMLFormElement>)=>{
-        e.preventDefault();
-        console.log(searchTask, ': Search form submited');
-        setSearchTask('');
+    const router = useRouter();
+    const dispatch = useDispatch<AppDispatch>();
+    const {user} = useSelector((state:RootState)=> state.user)
+
+    const handleLogOut = ()=> {
+        dispatch(logOut());
+        router.push('/log-in');
     }
 
     const handleDate = ()=> {
@@ -109,53 +112,42 @@ export default function Nav() {
 
     return (
         <div
-            className="flex flex-wrap justify-between items-center py-2 px-[2rem] h-full bg-gray-50 shadow-md shadow-gray-100"
+            className="flex fixed top-0 left-0 w-full flex-wrap justify-between gap-[2rem] items-center py-2 px-[2rem] h-[14vh] lg-[12vh] z-[1000] bg-gray-50 shadow-md shadow-gray-100"
         >
-            <form
-                className="relative w-full lg:w-[65%] bg-white rounded-lg"
-                onSubmit={(e)=>handleSubmit(e)}
-            >
-                <input 
-                    type="text" 
-                    placeholder="Search your task here..."
-                    value={searchTask}
-                    onChange={(e)=> setSearchTask(e.target.value)}
-                    className="px-2 py-2 outline-none border border-white w-full rounded-lg text-xs shadow-xl shadow-gray-100"
-                />
-                <button
-                    type="submit"
-                    className="absolute right-0 top-0 bg-red-400 h-full px-2 border border-red-400 cursor-pointer rounded-lg text-gray-200"
-                >
-                    <CiSearch />
-                </button>
-            </form>
             <div
-                className="w-full mt-2 lg:mt-0 lg:w-[30%] flex gap-[20%] items-center"
+                className="flex text-lg w-full lg:w-[70%] justify-between items-center  flex-wrap"
+            >
+                {user && <div
+                    className="w-fit"
+                >
+                    <span>Welcome back</span> <span className="font-semibold uppercase">{user?.firstName}</span>
+                </div>}
+                {user ? <div
+                    className="text-red-400 text-xl hover:underline lg:text-lg capitalize cursor-pointer w-fit"
+                    onClick={()=> handleLogOut()}
+                >
+                    log out
+                </div>: 
+                <div
+                    className='capitalize text-lg font-bold w-fit text-red-400'
+                >
+                    blizTodo
+                </div>
+                }
+            </div>
+            <div
+                className="w-full lg:mt-0 lg:w-fit text-lg flex items-center"
             >
                 <div
-                    className="flex gap-[1rem] items-center w-[30%]"
-                >
-                    <div
-                        className=" w-fit bg-red-400 h-full p-2 border border-red-400 cursor-pointer rounded-lg text-gray-200"
-                    >
-                        <AiOutlineBell />
-                    </div>
-                    <div
-                        className=" w-fit bg-red-400 h-full p-2 border border-red-400 cursor-pointer rounded-lg text-gray-200"
-                    >
-                        <SlCalender />
-                    </div>
-                </div>
-                <div
-                    className="w-[50%] text-sm font-semibold"
+                    className="flex items-center gap-4 font-semibold"
                 >
                     <span
-                        className="block"
+                        className="block w-fit"
                     >
                         {day&& <span>{day}</span>}
                     </span>
                     <span
-                        className="block text-blue-400"
+                        className="block text-blue-400 w-fit"
                     >
                         {date&&month&&year&& <span>{date}/{month}/{year.toString()}</span>}
                     </span>

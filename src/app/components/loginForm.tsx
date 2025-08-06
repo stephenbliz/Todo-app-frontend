@@ -11,9 +11,10 @@ import { MdLock } from "react-icons/md";
 export default function LogInForm(){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
 
     const dispatch = useDispatch<AppDispatch>();
-    const {loading, error} = useSelector((state: RootState) => state.user)
+    const {loading} = useSelector((state: RootState) => state.user)
     const router = useRouter();
 
     const forms = [
@@ -22,31 +23,32 @@ export default function LogInForm(){
     ];
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
+        setError('');
         const loginObject = {
             email,
             password
         };
         dispatch(logIn(loginObject)).then((result)=>{
-            if(result.payload){
+            if(result.payload.error === 'Invalid email or password'){
+                setError('Invalid email or password');
+            }else{
                 setEmail('');
                 setPassword('');
+                setError('')
                 router.push('/');
-            }else{
-                console.log(result);
-                throw new Error('Failed to log in, check network connection')
             }
         }).catch((err) => {
-            alert(err);
+            console.log(err);
         })
     }
 
     return(
         <form
-            className="w-full md:w-[80%] lg:w-[50%] mx-auto bg-white rounded-xl p-4"
+            className="w-full md:w-[80%] lg:w-[50%] mx-auto mt-[3.5rem] bg-white rounded-xl p-4"
             onSubmit={(e)=>handleSubmit(e)}
         >
             <h1
-                className="capitalize text-lg md:text-2xl font-semibold mb-8"
+                className="capitalize text-xl md:text-2xl font-semibold mb-8"
             >
                 sign in
             </h1>
@@ -84,11 +86,11 @@ export default function LogInForm(){
                 </div>
             }
             <button
-                className="w-fit bg-red-400 mb-4 text-gray-300 rounded-lg px-4 py-2 capitalize cursor-pointer text-sm"
+                className="w-fit bg-red-400 mb-4 text-gray-300 rounded-lg px-4 py-2 capitalize cursor-pointer"
                 type="submit"
                 disabled={loading}
             >
-                {loading? 'logging in': 'logIn'}
+                {loading? 'logging in': 'log in'}
             </button>
             <div
                 className="flex justify-start gap-2 items-center"
