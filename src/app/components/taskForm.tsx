@@ -69,7 +69,7 @@ export default function TaskForm(){
             >
                 <label 
                     htmlFor="title"
-                    className="text-xl capitalize block mb-2 "
+                    className="text-lg capitalize block mb-2 "
                 >
                     title
                 </label>
@@ -86,7 +86,7 @@ export default function TaskForm(){
                 className="w-full lg:w-[60%] mb-4"
             >
                 <div 
-                    className="text-xl capitalize mb-2"
+                    className="text-lg capitalize mb-2"
                 >
                     priority
                 </div>
@@ -137,7 +137,7 @@ export default function TaskForm(){
                 className="w-full lg:w-[60%] mb-4"
             >
                 <div 
-                    className="text-xl capitalize mb-2"
+                    className="text-lg capitalize mb-2"
                 >
                     status
                 </div>
@@ -192,7 +192,7 @@ export default function TaskForm(){
                 >
                     <label 
                         htmlFor="description"
-                        className="text-xl capitalize block mb-2"
+                        className="text-lg capitalize block mb-2"
                     >
                         task description
                     </label>
@@ -210,7 +210,7 @@ export default function TaskForm(){
                 >
                     <label 
                         htmlFor="image"
-                        className="text-xl capitalize block mb-2 "
+                        className="text-lg capitalize block mb-2 "
                     >
                         upload image
                     </label>

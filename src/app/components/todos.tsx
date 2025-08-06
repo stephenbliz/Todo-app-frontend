@@ -72,7 +72,7 @@ export default function Todo ({myTodos, setId, hasMounted}: TodoProps) {
                                 <p
                                     className="text-gray-500 mb-4"
                                 >
-                                    {mytodo.description.substring(0, 100)}
+                                    {mytodo.description.substring(0, 80)}
                                 </p>
                                 <div
                                     className="flex w-[60%] gap-2 items-center absolute bottom-0 left-[7%] text-[0.8rem] md:text-xl lg:text-[0.8rem]"
